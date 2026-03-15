@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/jmk/notebooklm-cli/internal/config"
+	"github.com/Dokkabei97/notebooklm-cli/internal/config"
 )
 
 // StorageState mirrors Playwright's storage_state.json format.

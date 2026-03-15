@@ -14,17 +14,17 @@ The existing Python client ([notebooklm-py](https://github.com/teng-lin/notebook
 
 ### Pre-built binaries
 
-Download from [Releases](https://github.com/jmk/notebooklm-cli/releases) for your platform.
+Download from [Releases](https://github.com/Dokkabei97/notebooklm-cli/releases) for your platform.
 
 ### Build from source
 
 ```bash
-git clone https://github.com/jmk/notebooklm-cli.git
+git clone https://github.com/Dokkabei97/notebooklm-cli.git
 cd notebooklm-cli
 make build        # produces ./nlm binary
 
 # or install to $GOPATH/bin
-go install github.com/jmk/notebooklm-cli@latest
+go install github.com/Dokkabei97/notebooklm-cli@latest
 ```
 
 ### Cross-compile

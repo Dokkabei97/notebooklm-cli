@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/jmk/notebooklm-cli/cmd"
+	"github.com/Dokkabei97/notebooklm-cli/cmd"
 )
 
 func main() {

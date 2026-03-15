@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/jmk/notebooklm-cli/internal/rpc"
+	"github.com/Dokkabei97/notebooklm-cli/internal/rpc"
 )
 
 // ResearchResult holds the result of a deep research operation.

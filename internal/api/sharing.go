@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/jmk/notebooklm-cli/internal/model"
-	"github.com/jmk/notebooklm-cli/internal/rpc"
+	"github.com/Dokkabei97/notebooklm-cli/internal/model"
+	"github.com/Dokkabei97/notebooklm-cli/internal/rpc"
 )
 
 // ShareStatus holds the sharing state of a notebook.

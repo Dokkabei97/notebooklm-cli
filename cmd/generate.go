@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jmk/notebooklm-cli/internal/api"
-	"github.com/jmk/notebooklm-cli/internal/output"
-	"github.com/jmk/notebooklm-cli/internal/rpc"
+	"github.com/Dokkabei97/notebooklm-cli/internal/api"
+	"github.com/Dokkabei97/notebooklm-cli/internal/output"
+	"github.com/Dokkabei97/notebooklm-cli/internal/rpc"
 	"github.com/spf13/cobra"
 )
 

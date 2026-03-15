@@ -14,8 +14,8 @@ builds:
       - CGO_ENABLED=0
     ldflags:
       - -s -w
-      - -X github.com/jmk/notebooklm-cli/cmd.Version={{.Version}}
-      - -X github.com/jmk/notebooklm-cli/cmd.CommitSHA={{.ShortCommit}}
+      - -X github.com/Dokkabei97/notebooklm-cli/cmd.Version={{.Version}}
+      - -X github.com/Dokkabei97/notebooklm-cli/cmd.CommitSHA={{.ShortCommit}}
     goos:
       - darwin
       - linux

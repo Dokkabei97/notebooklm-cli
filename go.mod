@@ -1,4 +1,4 @@
-module github.com/jmk/notebooklm-cli
+module github.com/Dokkabei97/notebooklm-cli
 
 go 1.26.1
 

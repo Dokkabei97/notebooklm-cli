@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/jmk/notebooklm-cli/internal/auth"
-	"github.com/jmk/notebooklm-cli/internal/model"
-	"github.com/jmk/notebooklm-cli/internal/rpc"
+	"github.com/Dokkabei97/notebooklm-cli/internal/auth"
+	"github.com/Dokkabei97/notebooklm-cli/internal/model"
+	"github.com/Dokkabei97/notebooklm-cli/internal/rpc"
 )
 
 // ListSources returns all sources in a notebook.

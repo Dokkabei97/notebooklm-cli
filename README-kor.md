@@ -16,16 +16,16 @@
 
 ### 빌드된 바이너리
 
-[Releases](https://github.com/jmk/notebooklm-cli/releases)에서 플랫폼별 바이너리를 다운로드합니다.
+[Releases](https://github.com/Dokkabei97/notebooklm-cli/releases)에서 플랫폼별 바이너리를 다운로드합니다.
 
 ### 소스에서 빌드
 
 ```bash
-git clone https://github.com/jmk/notebooklm-cli.git
+git clone https://github.com/Dokkabei97/notebooklm-cli.git
 cd notebooklm-cli
 make build
 
-go install github.com/jmk/notebooklm-cli@latest
+go install github.com/Dokkabei97/notebooklm-cli@latest
 ```
 
 ### 크로스 컴파일

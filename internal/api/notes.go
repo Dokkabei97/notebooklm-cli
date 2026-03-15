@@ -3,8 +3,8 @@ package api
 import (
 	"time"
 
-	"github.com/jmk/notebooklm-cli/internal/model"
-	"github.com/jmk/notebooklm-cli/internal/rpc"
+	"github.com/Dokkabei97/notebooklm-cli/internal/model"
+	"github.com/Dokkabei97/notebooklm-cli/internal/rpc"
 )
 
 // ListNotes returns all notes in a notebook.

@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/jmk/notebooklm-cli/internal/auth"
-	"github.com/jmk/notebooklm-cli/internal/model"
-	"github.com/jmk/notebooklm-cli/internal/rpc"
+	"github.com/Dokkabei97/notebooklm-cli/internal/auth"
+	"github.com/Dokkabei97/notebooklm-cli/internal/model"
+	"github.com/Dokkabei97/notebooklm-cli/internal/rpc"
 )
 
 // Ask sends a question to the notebook and returns the AI response.

@@ -1,7 +1,7 @@
 BINARY := nlm
 VERSION := $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
-LDFLAGS := -ldflags "-X github.com/jmk/notebooklm-cli/cmd.Version=$(VERSION) -X github.com/jmk/notebooklm-cli/cmd.CommitSHA=$(COMMIT)"
+LDFLAGS := -ldflags "-X github.com/Dokkabei97/notebooklm-cli/cmd.Version=$(VERSION) -X github.com/Dokkabei97/notebooklm-cli/cmd.CommitSHA=$(COMMIT)"
 
 .PHONY: build install clean test e2e e2e-basic release-dry
 

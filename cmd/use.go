@@ -3,8 +3,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/jmk/notebooklm-cli/internal/config"
-	"github.com/jmk/notebooklm-cli/internal/output"
+	"github.com/Dokkabei97/notebooklm-cli/internal/config"
+	"github.com/Dokkabei97/notebooklm-cli/internal/output"
 	"github.com/spf13/cobra"
 )
 

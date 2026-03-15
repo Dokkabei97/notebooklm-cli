@@ -3,9 +3,9 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/jmk/notebooklm-cli/internal/api"
-	"github.com/jmk/notebooklm-cli/internal/model"
-	"github.com/jmk/notebooklm-cli/internal/output"
+	"github.com/Dokkabei97/notebooklm-cli/internal/api"
+	"github.com/Dokkabei97/notebooklm-cli/internal/model"
+	"github.com/Dokkabei97/notebooklm-cli/internal/output"
 	"github.com/spf13/cobra"
 )
 

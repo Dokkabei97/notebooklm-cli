@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/jmk/notebooklm-cli/internal/auth"
-	"github.com/jmk/notebooklm-cli/internal/rpc"
+	"github.com/Dokkabei97/notebooklm-cli/internal/auth"
+	"github.com/Dokkabei97/notebooklm-cli/internal/rpc"
 )
 
 // Client is the main API client for NotebookLM.
