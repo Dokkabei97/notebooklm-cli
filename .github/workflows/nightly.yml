@@ -1,0 +1,61 @@
+name: Nightly E2E Tests
+
+on:
+  schedule:
+    - cron: "0 6 * * *"       # 6 AM UTC daily
+  workflow_dispatch:
+    inputs:
+      test_filter:
+        description: "Test filter (e.g. TestNotebookList)"
+        required: false
+        default: ""
+
+jobs:
+  e2e:
+    name: E2E Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    if: github.repository == 'jmk/notebooklm-cli'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest]
+        # macOS only — Chrome cookie extraction requires Keychain
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Build
+        run: go build -o nlm .
+
+      - name: Setup auth
+        env:
+          NOTEBOOKLM_AUTH_JSON: ${{ secrets.NOTEBOOKLM_AUTH_JSON }}
+        run: |
+          mkdir -p ~/.notebooklm
+          echo "${NOTEBOOKLM_AUTH_JSON}" > ~/.notebooklm/storage_state.json
+
+      - name: Verify auth
+        run: ./nlm auth status
+
+      - name: Run E2E tests
+        env:
+          NLM_BINARY: ${{ github.workspace }}/nlm
+        run: |
+          FILTER="${{ inputs.test_filter }}"
+          if [ -n "$FILTER" ]; then
+            go test ./e2e/ -v -run "$FILTER" -count=1 -timeout 120s
+          else
+            go test ./e2e/ -v -count=1 -timeout 120s
+          fi
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## E2E Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "- OS: ${{ matrix.os }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Go: $(go version)" >> $GITHUB_STEP_SUMMARY
+          echo "- Binary: $(./nlm version)" >> $GITHUB_STEP_SUMMARY

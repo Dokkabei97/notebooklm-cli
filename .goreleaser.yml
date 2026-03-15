@@ -1,0 +1,69 @@
+version: 2
+
+project_name: nlm
+
+before:
+  hooks:
+    - go mod tidy
+    - go vet ./...
+
+builds:
+  - main: .
+    binary: nlm
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X github.com/jmk/notebooklm-cli/cmd.Version={{.Version}}
+      - -X github.com/jmk/notebooklm-cli/cmd.CommitSHA={{.ShortCommit}}
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+
+archives:
+  - format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    name_template: "{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+      - "^chore:"
+
+homebrew_casks:
+  - name: nlm
+    binaries:
+      - nlm
+    homepage: "https://github.com/jmk/notebooklm-cli"
+    description: "Unofficial CLI client for Google NotebookLM"
+    repository:
+      owner: jmk
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+
+release:
+  github:
+    owner: jmk
+    name: notebooklm-cli
+  draft: false
+  prerelease: auto
+  name_template: "{{.Tag}}"

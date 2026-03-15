@@ -1,0 +1,126 @@
+name: RPC Health Check
+
+on:
+  schedule:
+    - cron: "0 7 * * *"       # 7 AM UTC daily (1h after nightly E2E)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health-check:
+    name: RPC Health Check
+    runs-on: macos-latest
+    if: github.repository == 'jmk/notebooklm-cli'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Build
+        run: go build -o nlm .
+
+      - name: Setup auth
+        env:
+          NOTEBOOKLM_AUTH_JSON: ${{ secrets.NOTEBOOKLM_AUTH_JSON }}
+        run: |
+          mkdir -p ~/.notebooklm
+          echo "${NOTEBOOKLM_AUTH_JSON}" > ~/.notebooklm/storage_state.json
+
+      - name: Check RPC endpoints
+        id: health
+        continue-on-error: true
+        env:
+          NOTEBOOKLM_NOTEBOOK_ID: ${{ secrets.NOTEBOOKLM_READ_ONLY_NOTEBOOK_ID }}
+        run: |
+          set +e
+          PASS=0
+          FAIL=0
+          REPORT=""
+
+          check() {
+            local name="$1"
+            shift
+            OUTPUT=$(./nlm "$@" 2>&1)
+            EXIT=$?
+            if [ $EXIT -eq 0 ]; then
+              PASS=$((PASS + 1))
+              REPORT="${REPORT}  ✅ ${name}\n"
+            else
+              FAIL=$((FAIL + 1))
+              REPORT="${REPORT}  ❌ ${name}: ${OUTPUT}\n"
+            fi
+          }
+
+          # Set active notebook
+          ./nlm use "${NOTEBOOKLM_NOTEBOOK_ID}" 2>/dev/null
+
+          # Test each RPC endpoint
+          check "auth status"       auth status
+          check "notebook list"     notebook list --json
+          check "source list"       source list --json
+          check "note list"         note list --json
+          check "artifact list"     artifact list --json
+          check "share status"      share status --json
+          check "chat ask"          chat ask "ping" --json
+
+          echo ""
+          echo "SUMMARY"
+          echo "======="
+          echo -e "$REPORT"
+          echo "Passed: $PASS  Failed: $FAIL"
+
+          # Save for issue creation
+          echo "pass_count=$PASS" >> $GITHUB_OUTPUT
+          echo "fail_count=$FAIL" >> $GITHUB_OUTPUT
+
+          if [ $FAIL -gt 0 ]; then
+            exit 1
+          fi
+
+      - name: Add Summary
+        if: always()
+        run: |
+          echo "## RPC Health Check" >> $GITHUB_STEP_SUMMARY
+          echo "- Passed: ${{ steps.health.outputs.pass_count || '?' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Failed: ${{ steps.health.outputs.fail_count || '?' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Binary: $(./nlm version)" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create issue on failure
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `RPC Health Check Failed (${new Date().toISOString().split('T')[0]})`;
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'rpc-health',
+              per_page: 1
+            });
+            if (existing.data.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body: `Still failing as of ${new Date().toISOString()}\nSee: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                labels: ['rpc-health', 'bug'],
+                body: `RPC Health Check failed.\n\nGoogle may have changed the NotebookLM batchexecute API (method IDs, response format, etc).\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+              });
+            }
