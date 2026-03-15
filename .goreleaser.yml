@@ -53,16 +53,16 @@ homebrew_casks:
   - name: nlm
     binaries:
       - nlm
-    homepage: "https://github.com/jmk/notebooklm-cli"
+    homepage: "https://github.com/Dokkabei97/notebooklm-cli"
     description: "Unofficial CLI client for Google NotebookLM"
     repository:
-      owner: jmk
+      owner: Dokkabei97
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
 
 release:
   github:
-    owner: jmk
+    owner: Dokkabei97
     name: notebooklm-cli
   draft: false
   prerelease: auto
